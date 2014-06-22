@@ -76,14 +76,20 @@ library(plyr)
 data$Activity <- as.factor(mapvalues(data$Activity, from=activities[,1], to=activities[,2]))
 
 ## Start of project task #5 - Create a tidy data set with the average of each variable for each activity and each subject
-# ...
-
-
-
-
-
+library(reshape2)
+# Melt our data frame...
+longdf <- melt(data, id.vars=c("Subject", "Activity"))
+# ...and cast it to result in our tidy data set required
+tidyData <- dcast(longdf, Subject+Activity ~ variable, fun.aggregate=mean)
+# Save tidy data set to file 'tidydata.txt' in the working directory
+write.csv(tidyData, file="tidydata.txt", row.names=FALSE)
 
 # Cleanup temporary environment variables
-remove(testdata, varnames, neededCols, activities)
+remove(testdata, varnames, neededCols, activities, longdf)
 
-message("Script execution complete.")
+message("Script execution complete. The following items will now be in the global 
+        environment: \n data - The trimmed dataset containing columns for subject id, 
+        activity id and each mean or standard deviation from the original data set. \n 
+        tidyData - The tidy data set containing columns for subject id, activity 
+        id and calclated averages for the selected variables from the original data 
+        set for each activity performed by each subject.")

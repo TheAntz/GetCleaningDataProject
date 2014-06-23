@@ -27,14 +27,14 @@ if(!file.exists("./UCI HAR Dataset/README.txt")) {
 # Load dataset components from the various files
 # Load and combine training data
 message("Reading file: subject_train.txt ...")
-data <- read.table("./UCI HAR Dataset/train/subject_train.txt", header=FALSE, col.names=c("Subject"), colClasses="factor")
+data <- read.table("./UCI HAR Dataset/train/subject_train.txt", header=FALSE, col.names=c("Subject"))
 message("Reading file: X_train.txt ...")
 data <- cbind(data, read.table("./UCI HAR Dataset/train/X_train.txt", header=FALSE))
 message("Reading file: y_train.txt ...")
 data <- cbind(data, read.table("./UCI HAR Dataset/train/y_train.txt", header=FALSE, col.names=c("Activity"), colClasses="factor"))
 # Load and combine testing data
 message("Reading file: subject_test.txt ...")
-testdata <- read.table("./UCI HAR Dataset/test/subject_test.txt", header=FALSE, col.names=c("Subject"), colClasses="factor")
+testdata <- read.table("./UCI HAR Dataset/test/subject_test.txt", header=FALSE, col.names=c("Subject"))
 message("Reading file: X_test.txt ...")
 testdata <- cbind(testdata, read.table("./UCI HAR Dataset/test/X_test.txt", header=FALSE))
 message("Reading file: y_test.txt ...")
@@ -51,6 +51,7 @@ varnames <- c("Subject", varnames, "Activity")
 message("Removing special characters from names...")
 varnames <- gsub("[\\(\\)+]", "", varnames)
 varnames <- gsub("[-,]", "_", varnames)
+# Modify names to be more desctive: t->time, f->freq and anglet->angle_time
 message("Modifying names to be more descriptive...")
 varnames <- gsub("^t", "time_", varnames)
 varnames <- gsub("^f", "freq_", varnames)
@@ -63,7 +64,6 @@ names(data) <- varnames
 message("Reducing dataset to include only calculated means or Std deviations of measured variables...")
 # Get logical vector of which columns to keep
 neededCols <- grepl("Subject|Activity|mean|std", names(data), ignore.case=TRUE)
-neededCols <- neededCols & (!grepl("meanFreq", names(data), ignore.case=TRUE))
 # Subset data frame to only the required columns
 data <- data[,neededCols]
 
@@ -82,14 +82,9 @@ longdf <- melt(data, id.vars=c("Subject", "Activity"))
 # ...and cast it to result in our tidy data set required
 tidyData <- dcast(longdf, Subject+Activity ~ variable, fun.aggregate=mean)
 # Save tidy data set to file 'tidydata.txt' in the working directory
-write.csv(tidyData, file="tidydata.txt", row.names=FALSE)
+write.csv(tidyData, file="tidyData.txt", row.names=FALSE)
 
 # Cleanup temporary environment variables
 remove(testdata, varnames, neededCols, activities, longdf)
 
-message("Script execution complete. The following items will now be in the global 
-        environment: \n data - The trimmed dataset containing columns for subject id, 
-        activity id and each mean or standard deviation from the original data set. \n 
-        tidyData - The tidy data set containing columns for subject id, activity 
-        id and calclated averages for the selected variables from the original data 
-        set for each activity performed by each subject.")
+message("\nScript execution complete. The following items will now be in the global environment: \ndata -  The trimmed dataset containing columns for subject id, activity id and each mean or standard deviation from the original data set. \ntidyData -  The tidy data set containing columns for subject id, activity id and calclated averages for the selected variables from the original data set for each activity performed by each subject.")

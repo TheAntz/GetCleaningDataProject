@@ -4,3 +4,5 @@
 project.Rproj
 UCI HAR Dataset.zip
 /UCI HAR Dataset
+*.html
+*.txt

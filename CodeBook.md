@@ -15,7 +15,7 @@ A factor variable denoting the activity which was performed.
 
 **Variables in remaining columns**
 
-Computed average values for each of the variables in the original data set that were a calculated mean or standard deviation of a measured input. These are selected from the original data set by the condition that the string "mean" or "std" appeared in the variable name. Any characters in the remaining variable names likely to cause syntax errors in R (parenthesis and addition signs) were then removed and any dashes or commas in the names were replaced with underscores to preserve readability.
+Computed average values for each of the variables in the original data set that were a calculated mean or standard deviation of a measured input. These are selected from the original data set by the condition that the string "mean" or "std" appeared in the variable name. Any characters in the remaining variable names likely to cause syntax errors in R (parenthesis and addition signs) were then removed and any dashes or commas in the names were replaced with underscores to preserve readability. In addition, to make the variable names a little more descriptive, the strings 't', 'f', and 'anglet' at the start of the variable names were replaced with ``'time_'``, ``'freq_'`` and ``'angle_time_'`` respectively.
 
 Further details on the variable names can be found in the 'features_info.txt' file contained in the original data set ZIP archive (available [here](http://archive.ics.uci.edu/ml/datasets/Human+Activity+Recognition+Using+Smartphones)).
 
